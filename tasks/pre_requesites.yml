@@ -1,0 +1,11 @@
+#
+# Pre-Requesites
+#
+
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+  - cryptsetup
+  tags:
+  - encrypt
+  - packages

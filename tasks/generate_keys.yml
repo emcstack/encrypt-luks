@@ -1,0 +1,41 @@
+#
+# Generate key(s) for the disk(s)
+#
+
+- name: Check if the key exists
+  stat: path={{ encrypt_key_folder }}/{{ key_file }}
+  register: stat
+  when:
+  - use_same_encrypt_key
+  tags:
+  - encrypt
+
+- name: Generate unique encryption file for ALL disks
+  shell: stat {{ encrypt_key_folder }}/{{ key_file }} 2>&1>/dev/null || dd bs={{ encrypt_key_size }} count=4 if=/dev/urandom of={{ encrypt_key_folder }}/{{ key_file }} iflag=fullblock
+  when:
+  - use_same_encrypt_key
+  tags:
+  - encrypt
+
+- name: Generate encryption file(s) for each disk
+  shell: stat {{ encrypt_key_folder }}/{{ item }}-key 2>&1>/dev/null || dd bs={{ encrypt_key_size }} count=4 if=/dev/urandom of={{ encrypt_key_folder }}/{{ item }}-key iflag=fullblock
+  with_items:
+  - "{{ hostvars[ansible_hostname]['hdds'] }}"
+  when:
+  - not use_same_encrypt_key
+  tags:
+  - encrypt
+
+- name: Retrieve encryption key
+  fetch: src={{ encrypt_key_folder }}/{{ key_file }} dest=/var/tmp/{{ key_file }}-{{ ansible_hostname }}
+  when: use_same_encrypt_key
+  tags:
+  - encrypt
+
+- name: Retrieve encryption key(s)
+  fetch: src={{ encrypt_key_folder }}/{{ key_file }} dest=/var/tmp/{{ ansible_hostname }}-{{ item }}-key
+  with_items:
+  - "{{ hostvars[ansible_hostname]['hdds'] }}"
+  when: not use_same_encrypt_key
+  tags:
+  - encrypt

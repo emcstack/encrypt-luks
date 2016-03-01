@@ -1,0 +1,12 @@
+#
+# LUK the disks
+#
+
+- name: Encrypt OSDs
+  shell: /sbin/cryptsetup -q luksFormat /dev/{{ item }}1 {{ encrypt_key_folder }}/{{ key_file }}
+  when:
+  - use_same_encrypt_key
+  tags:
+  - encrypt
+  with_items:
+  - "{{ hostvars[ansible_hostname]['hdds'] }}"

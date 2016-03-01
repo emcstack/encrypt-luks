@@ -1,0 +1,12 @@
+#
+# Encrypt disks with LUKs
+#
+
+- name: Pre requesites
+  include: pre_requesites.yml
+
+- name: Generate keys
+  include: generate_keys.yml
+
+- name: Encrypt disks
+  include: encrypt.yml
