@@ -5,13 +5,10 @@
 encrypt_key_size: 512
 
 # Default directory to store the keys
-encrypt_key_folder: /var/tmp/
+encrypt_key_folder: /var/tmp
 
 # Default key name
 key_file: luk-keyfile
 
 # Set to false to generate a different key for each disk
 use_same_encrypt_key: True
-
-# Set to false to ignore human approval
-prompt: true

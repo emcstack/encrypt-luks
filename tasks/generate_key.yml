@@ -19,7 +19,7 @@
   - encrypt
 
 - name: Retrieve encryption key
-  fetch: src={{ encrypt_key_folder }}/{{ key_file }} dest=/var/tmp/{{ key_file }}-{{ inventory_hostname }} flat=yes
+  fetch: src={{ encrypt_key_folder }}/{{ key_file }} dest={{ encrypt_key_folder }}/{{ key_file }}-{{ inventory_hostname }} flat=yes
   when: use_same_encrypt_key
   tags:
   - encrypt
