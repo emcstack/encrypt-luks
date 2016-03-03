@@ -3,10 +3,12 @@
 #
 
 - name: Encrypt OSDs
-  shell: /sbin/cryptsetup -q luksFormat /dev/{{ item }}1 {{ encrypt_key_folder }}/{{ key_file }}
+  shell: /sbin/cryptsetup -q luksFormat {{ item }} {{ encrypt_key_folder }}/{{ key_file }}
   when:
   - use_same_encrypt_key
+  - (ansible_os_family == "CentOS") or
+    (ansible_os_family == "RedHat")
   tags:
   - encrypt
   with_items:
-  - "{{ hostvars[ansible_hostname]['hdds'] }}"
+  - "{{ hdds }}"

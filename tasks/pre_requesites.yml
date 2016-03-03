@@ -9,3 +9,5 @@
   tags:
   - encrypt
   - packages
+  when: (ansible_os_family == "CentOS") or
+        (ansible_os_family == "RedHat")

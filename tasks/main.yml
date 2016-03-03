@@ -5,8 +5,18 @@
 - name: Pre requesites
   include: pre_requesites.yml
 
-- name: Generate keys
-  include: generate_keys.yml
+- name: Generate key for all disks
+  include: generate_key.yml
+  when:
+  - use_same_encrypt_key
+
+- name: Generate key for all disks
+  include: generate_key.yml
+  when:
+  - not use_same_encrypt_key
 
 - name: Encrypt disks
   include: encrypt.yml
+  when: (ansible_os_family == "CentOS") or
+        (ansible_os_family == "RedHat")
+  become: yes
