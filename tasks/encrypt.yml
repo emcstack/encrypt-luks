@@ -4,11 +4,12 @@
 
 - name: Encrypt OSDs
   shell: /sbin/cryptsetup -q luksFormat {{ item }} {{ encrypt_key_folder }}/{{ key_file }}
+  with_items:
+  - "{{ hdds }}"
   when:
   - use_same_encrypt_key
   - (ansible_os_family == "CentOS") or
     (ansible_os_family == "RedHat")
+  - "{{ item|basename|regex_replace('[0-9]', '') in hostvars[inventory_hostname]['ansible_devices'] }}"
   tags:
   - encrypt
-  with_items:
-  - "{{ hdds }}"
